@@ -139,7 +139,6 @@ export async function initializeDatabase(filename: string): Promise<TechAssistPo
             dueDate: new Date(row.dueDate),
             skillsNeeded: JSON.parse(row.skillsNeeded)
         }));
-        console.log("Loaded projects:", projects);
         return projects;
     }
 
@@ -147,7 +146,26 @@ export async function initializeDatabase(filename: string): Promise<TechAssistPo
         // TODO: Complete this method to return projects which match the volunteer's skills and availability
         //       There are SQL-based solutions to this problem, but they can get quite complex and database-specific.
         //       For this exercise, use Typescript to filter the projects after retrieving them.
-        return [];
+
+        // @NOTE Naive Implementation:
+        // The project matches the volunteer if the volunteer has any availability prior to the due date AND
+        // has matching skills. For the heck of it, filter projects on skills and quick return if nothing matches,
+        // then do the date matching. "Optimized" for our data set of all of... 2-3 projects.
+        const volunteers = await getVolunteers();
+
+        // @NOTE Quick return if no results and not found messaging.
+        const volunteer = volunteers.find(volunteer => volunteer.name === volunteerName)
+        const projects = await getProjects();
+
+        // @NOTE Not handling skills is null/undefined.
+        const projectsOverlap = projects.filter(project => {
+            return project.skillsNeeded.filter(skill => skill.includes(volunteer.skills)).length > 0
+        });
+
+        // @TODO Handling dates, first getting this thing to render in browser.
+        // @TODO Currently not handling requiredDays at all, need to check documentation.
+
+        return projectsOverlap;
     }
 
     return {
