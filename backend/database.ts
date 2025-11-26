@@ -146,25 +146,32 @@ export async function initializeDatabase(filename: string): Promise<TechAssistPo
         // TODO: Complete this method to return projects which match the volunteer's skills and availability
         //       There are SQL-based solutions to this problem, but they can get quite complex and database-specific.
         //       For this exercise, use Typescript to filter the projects after retrieving them.
+        const volunteers = await getVolunteers();
+
+        // @NOTE Quick return if no results. Would add messaging.
+        const volunteer = volunteers.find(volunteer => volunteer.name === volunteerName)
+        if (!volunteer || !volunteer.skills) {
+            return []
+        }
+        
+        const projects = await getProjects();
 
         // @NOTE Naive Implementation:
         // The project matches the volunteer if the volunteer has any availability prior to the due date AND
-        // has matching skills. For the heck of it, filter projects on skills and quick return if nothing matches,
-        // then do the date matching. "Optimized" for our data set of all of... 2-3 projects.
-        const volunteers = await getVolunteers();
-
-        // @NOTE Quick return if no results and not found messaging.
-        const volunteer = volunteers.find(volunteer => volunteer.name === volunteerName)
-        const projects = await getProjects();
-
-        // @NOTE Not handling skills is null/undefined.
+        // has matching skills.
         const projectsOverlap = projects.filter(project => {
-            return project.skillsNeeded.filter(skill => skill.includes(volunteer.skills)).length > 0
+            const hasSkillMatch = project.skillsNeeded.some(skill => volunteer.skills.includes(skill));
+            const hasDateMatch = volunteer.availability.some(date => {
+                const availabilityDate = new Date(date);
+                const projectedCompletion = new Date(availabilityDate);
+                // Add the project's requiredDays to the availabilityDate, then see if it is before or equal to
+                // the dueDate. Yay mutation!
+                projectedCompletion.setDate(projectedCompletion.getDate() + project.requiredDays);
+                return projectedCompletion <= project.dueDate;
+            });
+            
+            return hasSkillMatch && hasDateMatch;
         });
-
-        // @TODO Handling dates, first getting this thing to render in browser.
-        // @TODO Currently not handling requiredDays at all, need to check documentation.
-
         return projectsOverlap;
     }
 

@@ -41,11 +41,11 @@ export function CreateVolunteerPage() {
             {!isSubmitted && <form method="post" onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor='name'>Volunteer Name:</label>
-                    <input type='text' name='name' placeholder='Volunteer Name' required onChange={onNameChange}/>
+                    <input className="border border-slate-400 rounded-sm px-2 py-1 mr-2" type='text' name='name' placeholder='Volunteer Name' required onChange={onNameChange}/>
                 </div>
                 <SkillsInput onSkillsChange={onSkillsChange} />
                 <MultiDatePicker selectedDates={selectedDates} onDatesChange={onAvailabilityChange} />
-                <button type="submit">
+                <button  className="rounded-sm px-2 py-1 bg-cyan-500 text-white hover:bg-cyan-800" type="submit">
                     Submit
                 </button>
             </form>}

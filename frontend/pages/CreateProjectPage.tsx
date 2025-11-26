@@ -37,24 +37,24 @@ export function CreateProjectPage() {
             <h2>Create New Project</h2>
             {isSubmitted && <p>Submitted.</p>}
             {!isSubmitted && <form method="post" onSubmit={handleSubmit}>
-                <div className=''>
-                    <label className='' htmlFor='name'>Project Name:</label>
-                    <input className="" type='text' name='name' placeholder='Project Name' onChange={handleInputChange}/>
-                </div>
-                <div className=''>
-                    <label className='' htmlFor='organizationName'>Organization Name:</label>
-                    <input className="" type='text' name='organizationName' placeholder='Organization Name' onChange={handleInputChange}/>
+                <div>
+                    <label htmlFor='name'>Project Name:</label>
+                    <input className="border border-slate-400 rounded-sm px-2 py-1 mr-2" type='text' name='name' placeholder='Project Name' onChange={handleInputChange}/>
                 </div>
                 <div>
-                    <label className='' htmlFor='requiredDays'>Required Days:</label>
-                    <input className="" type='number' name='requiredDays' placeholder='Required Days' onChange={handleInputChange}/>
+                    <label htmlFor='organizationName'>Organization Name:</label>
+                    <input className="border border-slate-400 rounded-sm px-2 py-1 mr-2" type='text' name='organizationName' placeholder='Organization Name' onChange={handleInputChange}/>
                 </div>
                 <div>
-                    <label className='' htmlFor='dueDate'>Due Date:</label>
-                    <input className="" type='date' name='dueDate' placeholder='Due Date' onChange={handleInputChange}/>
+                    <label htmlFor='requiredDays'>Required Days:</label>
+                    <input className="border border-slate-400 rounded-sm px-2 py-1 mr-2" type='number' name='requiredDays' placeholder='Required Days' onChange={handleInputChange}/>
+                </div>
+                <div>
+                    <label htmlFor='dueDate'>Due Date:</label>
+                    <input className="border border-slate-400 rounded-sm px-2 py-1 mr-2" type='date' name='dueDate' placeholder='Due Date' onChange={handleInputChange}/>
                 </div>
                 <SkillsInput onSkillsChange={(skillsNeeded) => setFormData(prev => ({ ...prev, skillsNeeded }))} />
-                <button className="" type="submit">
+                <button  className="rounded-sm px-2 py-1 bg-cyan-500 text-white hover:bg-cyan-800" type="submit">
                     Submit
                 </button>
             </form>}
